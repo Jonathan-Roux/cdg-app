@@ -16,7 +16,7 @@ app = FastAPI(title="CDG Serrurerie", version="2.0")
 templates = Jinja2Templates(directory="app/templates")
 
 # CORS
-ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "https://cdgserrurerie.fr,https://www.cdgserrurerie.fr,http://localhost:3000").split(",")
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "https://cdgserrurerie.fr,https://www.cdgserrurerie.fr,http://localhost:3000,http://localhost:5500,http://localhost:8080,http://127.0.0.1:5500").split(",")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
