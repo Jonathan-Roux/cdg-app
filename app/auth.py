@@ -4,14 +4,19 @@ import bcrypt
 from fastapi import HTTPException, Cookie
 from typing import Optional
 
-SECRET_KEY = "cdg-serrurerie-secret-key-2026"
+import os
+
+SECRET_KEY = os.getenv("SECRET_KEY", "cdg-serrurerie-secret-key-2026")
 ALGORITHM = "HS256"
 EXPIRE_MINUTES = 60 * 8  # 8 heures
 
+_mdp = os.getenv("APP_PASSWORD", "cdg2026").encode()
+_username = os.getenv("APP_USERNAME", "jonathan")
+
 # Utilisateur unique
 UTILISATEUR = {
-    "username": "jonathan",
-    "password": bcrypt.hashpw(b"cdg2026", bcrypt.gensalt())
+    "username": _username,
+    "password": bcrypt.hashpw(_mdp, bcrypt.gensalt())
 }
 
 def verifier_mot_de_passe(mdp_brut: str, mdp_hash: bytes):
@@ -30,7 +35,4 @@ def get_utilisateur_actuel(token: Optional[str] = Cookie(default=None)):
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username = payload.get("sub")
         if not username:
-            raise HTTPException(status_code=401, detail="Token invalide")
-        return username
-    except JWTError:
-        raise HTTPException(status_code=401, detail="Token invalide")
+            raise HTTPException(status_code=401, deta
